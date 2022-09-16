@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li>
+        <a id="manage" class="nav-link scrollto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="bx bx-user"></i><span>Hi @UserManager.GetUserName(User).</span></a>
+    </li>
+    
+}
+else
+{
+    @*<li><a class="nav-link scrollto" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a></li>*@
+    <li><a class="nav-link scrollto" id="login" asp-area="Identity" asp-page="/Account/Login"><i class="bx bx-user"></i><span>Login</span></a></li>
+}
