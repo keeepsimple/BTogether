@@ -36,9 +36,9 @@
     </div>
     @foreach (var item in Model.ImageMemories)
     {
-        <div class="col-md-4 mt-3">
+        <div class="col-md-3 mt-3">
             <div class="card" style="width: 18rem;">
-                <img src="~/@Model.UserId/@item.Url" class="card-img-top" alt="@item.Description">
+                <img id="imgMem" src="~/images/@Model.UserId/@item.Url" class="card-img-top" alt="@item.Description">
                 <div class="card-body">
                     <p class="card-text">@item.Description</p>
                     <button id="edit" class="btn btn-primary btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">
@@ -47,14 +47,19 @@
                     <button id="delete" class="btn btn-danger btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
                         <span class="text">Delete</span>
                     </button>
+                    <input id="id" name="id" type="hidden" value="@item.Id" />
                 </div>
             </div>
         </div>
     }
-    <div class="col-md-4 mt-3">
-        <button id="add" class="btn btn-success btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
-            <span class="text">Add Image</span>
-        </button>
+    <div class="col-md-3 mt-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body text-center">
+                <button id="add" class="btn btn-success btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+                    <span class="text">Add Image</span>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -70,6 +75,7 @@
             <form id="create-form" class="text-center" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
                 <div class="form-floating mb-3 mt-3">
+                    <img id="showImage" src="" class="w-50 h-50 bg-light mr-2 mb-3" alt="">
                     <input asp-for="@Model.FileUpload" />
                     <span asp-validation-formaction="@Model.FileUpload"></span>
                 </div>
@@ -77,6 +83,7 @@
                     <input asp-for="Input.Description" class="form-control" required />
                     <label asp-for="Input.Description" class="form-label"></label>
                 </div>
+                <input type="hidden" asp-for="Input.StoryId" />
                 <div class="modal-footer">
                     <button id="settings-button" type="submit" class="btn btn-success">Create</button>
                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
@@ -85,7 +92,7 @@
         </div>
     </div>
 </div>
-@*<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -97,8 +104,12 @@
             <form id="update-form" asp-page-handler="Edit" class="text-center" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
                 <div class="form-floating mb-3 mt-3">
-                    <input asp-for="Input.Title" class="form-control" required />
-                    <label asp-for="Input.Title" class="form-label"></label>
+                    <img id="showImage" src="" class="w-50 h-50 bg-light mr-2 mb-3" alt="">
+                    <input asp-for="Input.Url" style="display:none"/>
+                </div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.Description" class="form-control" required />
+                    <label asp-for="Input.Description" class="form-label"></label>
                 </div>
                 <input type="hidden" name="id" id="id" />
                 <div class="modal-footer">
@@ -113,7 +124,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Story</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Delete Image</h5>
                 <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                     ×
                 </button>
@@ -121,11 +132,7 @@
             <form id="delete-form" asp-page-handler="Delete" class="text-center" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
                 <div class="text-center">
-                    <span class="fs-5">Are you sure to delete this story?</span>
-                </div>
-                <div class="form-floating mb-3 mt-3">
-                    <input asp-for="Input.Title" class="form-control" disabled />
-                    <label asp-for="Input.Title" class="form-label"></label>
+                    <span class="fs-5">Are you sure to delete this image?</span>
                 </div>
                 <input type="hidden" name="id" id="id" />
                 <div class="modal-footer">
@@ -135,4 +142,53 @@
             </form>
         </div>
     </div>
-</div>*@
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.card-body #delete').on('click', function () {
+                var id = $(this).parent().find('#id').val();
+                console.log
+                $.ajax({
+                    type: 'GET',
+                    data: { id: id },
+                    url: '@Url.Page("AddImageToStory", "Delete")',
+                    success: function (result) {
+                        $('#deleteModal #id').val(result.id);
+                    }
+                });
+            });
+
+            $('.card-body #edit').on('click', function () {
+                var id = $(this).parent().find('#id').val();
+                $.ajax({
+                    type: 'GET',
+                    data: { id: id },
+                    url: '@Url.Page("AddImageToStory", "Edit")',
+                    success: function (result) {
+                        $('#editModal #id').val(result.id);
+                        $('#editModal #Input_Description').val(result.description);
+                        $('#editModal #Input_Url').val(result.url);
+                        $('#editModal #showImage').attr("src", '../images/@Model.UserId/' + result.url);
+                    }
+                });
+            });
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#showImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#FileUpload").change(function () {
+                readURL(this);
+
+            });
+        });
+    </script>
+}
