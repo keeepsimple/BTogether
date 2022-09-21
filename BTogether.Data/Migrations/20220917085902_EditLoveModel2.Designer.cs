@@ -4,6 +4,7 @@ using BTogether.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTogether.Data.Migrations
 {
     [DbContext(typeof(BTogetherContext))]
-    partial class BTogetherContextModelSnapshot : ModelSnapshot
+    [Migration("20220917085902_EditLoveModel2")]
+    partial class EditLoveModel2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,9 +116,6 @@ namespace BTogether.Data.Migrations
 
                     b.Property<DateTime?>("ApartDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("DisplayText")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastModify")
                         .IsRequired()

@@ -5,6 +5,7 @@ namespace BTogether.BussinessLayer.IServices
 {
     public interface IStoryService : IBaseServices<Story>
     {
+        Task<IEnumerable<Story>> GetStoryByLoveIdAsync(int loveId);
     }
 
 }

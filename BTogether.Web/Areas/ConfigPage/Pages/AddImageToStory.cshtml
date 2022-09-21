@@ -1,0 +1,138 @@
+﻿@page
+@model AddImageToStoryModel
+@{
+    ViewData["Title"] = "Add Image To " + Model.StoryView.Title;
+}
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid ">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " asp-area="ConfigPage" asp-page="/HowLong">How Long</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="ConfigPage" asp-page="/HobbyConfig">Hobby</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" asp-area="ConfigPage" asp-page="/StoryConfig">Story</a>
+                </li>
+                <li>
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link scrollto btn btn-link">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="badge bg-primary text-wrap fs-3" style="width: 40rem;">
+            Add Image To: @Model.StoryView.Title
+        </div>
+    </div>
+    @foreach (var item in Model.ImageMemories)
+    {
+        <div class="col-md-4 mt-3">
+            <div class="card" style="width: 18rem;">
+                <img src="~/@Model.UserId/@item.Url" class="card-img-top" alt="@item.Description">
+                <div class="card-body">
+                    <p class="card-text">@item.Description</p>
+                    <button id="edit" class="btn btn-primary btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">
+                        <span class="text">Edit</span>
+                    </button>
+                    <button id="delete" class="btn btn-danger btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <span class="text">Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-md-4 mt-3">
+        <button id="add" class="btn btn-success btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+            <span class="text">Add Image</span>
+        </button>
+    </div>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Image</h5>
+                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form id="create-form" class="text-center" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="@Model.FileUpload" />
+                    <span asp-validation-formaction="@Model.FileUpload"></span>
+                </div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.Description" class="form-control" required />
+                    <label asp-for="Input.Description" class="form-label"></label>
+                </div>
+                <div class="modal-footer">
+                    <button id="settings-button" type="submit" class="btn btn-success">Create</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@*<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Story</h5>
+                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form id="update-form" asp-page-handler="Edit" class="text-center" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.Title" class="form-control" required />
+                    <label asp-for="Input.Title" class="form-label"></label>
+                </div>
+                <input type="hidden" name="id" id="id" />
+                <div class="modal-footer">
+                    <button id="settings-button" type="submit" class="btn btn-success">Update</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Story</h5>
+                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    ×
+                </button>
+            </div>
+            <form id="delete-form" asp-page-handler="Delete" class="text-center" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+                <div class="text-center">
+                    <span class="fs-5">Are you sure to delete this story?</span>
+                </div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.Title" class="form-control" disabled />
+                    <label asp-for="Input.Title" class="form-label"></label>
+                </div>
+                <input type="hidden" name="id" id="id" />
+                <div class="modal-footer">
+                    <button id="settings-button" type="submit" class="btn btn-danger">Delete</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>*@

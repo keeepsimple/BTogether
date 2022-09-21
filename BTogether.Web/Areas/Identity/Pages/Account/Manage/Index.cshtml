@@ -12,7 +12,13 @@
                     <a class="nav-link active" asp-page="/Account/Manage/Index">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="Love" asp-page="/Settings">Settings</a>
+                    <a class="nav-link" asp-area="ConfigPage" asp-page="/HowLong">How Long</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="ConfigPage" asp-page="/HobbyConfig">Hobby</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="ConfigPage" asp-page="/StoryConfig">Story</a>
                 </li>
                 <li>
                     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">

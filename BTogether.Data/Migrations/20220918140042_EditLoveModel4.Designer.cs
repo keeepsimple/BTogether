@@ -4,6 +4,7 @@ using BTogether.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTogether.Data.Migrations
 {
     [DbContext(typeof(BTogetherContext))]
-    partial class BTogetherContextModelSnapshot : ModelSnapshot
+    [Migration("20220918140042_EditLoveModel4")]
+    partial class EditLoveModel4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

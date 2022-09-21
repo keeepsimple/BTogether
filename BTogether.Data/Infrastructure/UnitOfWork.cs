@@ -8,6 +8,11 @@ namespace BTogether.Data.Infrastructure
         private readonly BTogetherContext _dbContext;
         public BTogetherContext BTogetherContext => _dbContext;
 
+        public UnitOfWork(BTogetherContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         private ICoreRepository<Love> _loveRepository;
         public ICoreRepository<Love> LoveRepository => _loveRepository ?? new CoreRepository<Love>(_dbContext);
 

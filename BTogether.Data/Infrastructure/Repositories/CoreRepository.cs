@@ -10,7 +10,7 @@ namespace BTogether.Data.Infrastructure.Repositories
 
         public CoreRepository(BTogetherContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException("context");
             DbSet = context.Set<Entity>();
         }
 

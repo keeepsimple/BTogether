@@ -5,6 +5,6 @@ namespace BTogether.BussinessLayer.IServices
 {
     public interface IHobbyService : IBaseServices<Hobby>
     {
+        Task<IEnumerable<Hobby>> GetHobbiesByUserId(string userId);
     }
-
 }

@@ -6,7 +6,13 @@
 
         public DateTime StartDate { get; set; }
 
-        public DateTime ApartDate { get; set; }
+        public DateTime? ApartDate { get; set; }
+
+        public string? PartnerName { get; set; }
+
+        public string? PartnerId { get; set; }
+
+        public string? DisplayText { get; set; }
 
         public string? UserId { get; set; }
 

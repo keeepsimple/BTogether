@@ -6,5 +6,7 @@ namespace BTogether.BussinessLayer.IServices
     public interface ILoveService : IBaseServices<Love>
     {
         bool CheckUserCreateLove(string userId);
+
+        Task<int> GetLoveIdByUserId(string userId);
     }
 }

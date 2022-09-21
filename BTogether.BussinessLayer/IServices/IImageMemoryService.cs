@@ -5,6 +5,7 @@ namespace BTogether.BussinessLayer.IServices
 {
     public interface IImageMemoryService : IBaseServices<ImageMemory>
     {
+        Task<IEnumerable<ImageMemory>> GetImageMemoriesByStoryIdAsync(int storyId);
     }
 
 }

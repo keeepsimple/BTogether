@@ -1,0 +1,192 @@
+﻿@page
+@model HobbyConfigModel
+@{
+    ViewData["Title"] = "Hobby Config";
+}
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid ">
+        <div class="collapse navbar-collapse text-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " asp-area="ConfigPage" asp-page="/HowLong">How Long</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" asp-area="ConfigPage" asp-page="/HobbyConfig">Hobby</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="ConfigPage" asp-page="/StoryConfig">Story</a>
+                </li>
+                <li>
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link scrollto btn btn-link">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-warning btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">
+            <span class="text">Create</span>
+        </button>
+        <table class="table table-hover">
+            <tr>
+                <th>Her/His</th>
+                <th>Hobby Text</th>
+                <th>Action</th>
+            </tr>
+            @foreach (var item in Model.Hobbies)
+            {
+                <tr>
+                    <td><span class="badge @(item.HerHis == false ? "bg-danger" : "bg-success")">@(item.HerHis == true ? "Her" : "His")</span></td>
+                    <td>@item.HobbyText</td>
+                    <td>
+                        <button id="edit" class="btn btn-primary btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">
+                            <span class="text">Edit</span>
+                        </button>
+                        <button id="delete" class="btn btn-danger btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <span class="text">Delete</span>
+                        </button>
+                        <input type="hidden" name="id" id="id" value="@item.Id" />
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create New Hobby</h5>
+                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form id="hobby-form" class="text-center" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+                <div class="text-center">
+                    <span class="fs-5">Her / His Hobby</span>
+                </div>
+                <div class="form-check form-check-inline mt-3">
+                    <input class="form-check-input" type="radio" asp-for="Input.HerHis" value="true" required>
+                    <label class="form-check-label fw-bold" asp-for="Input.HerHis">Her</label>
+                </div>
+                <div class="form-check form-check-inline mt-3">
+                    <input class="form-check-input" type="radio" asp-for="Input.HerHis" value="false" required>
+                    <label class="form-check-label fw-bold" asp-for="Input.HerHis">His</label>
+                </div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.HobbyText" class="form-control" />
+                    <label asp-for="Input.HobbyText" class="form-label"></label>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="settings-button" type="submit" class="btn btn-success">Create</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Hobby</h5>
+                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    ×
+                </button>
+            </div>
+            <form id="edit-form" asp-page-handler="Edit" class="text-center" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+                <div class="text-center">
+                    <span class="fs-5">Her / His Hobby</span>
+                </div>
+                <div class="form-check form-check-inline mt-3">
+                    <input class="form-check-input her" type="radio" asp-for="Input.HerHis" value="true" required>
+                    <label class="form-check-label fw-bold" asp-for="Input.HerHis">Her</label>
+                </div>
+                <div class="form-check form-check-inline mt-3">
+                    <input class="form-check-input his" type="radio" asp-for="Input.HerHis" value="false" required>
+                    <label class="form-check-label fw-bold" asp-for="Input.HerHis">His</label>
+                </div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.HobbyText" class="form-control" />
+                    <label asp-for="Input.HobbyText" class="form-label"></label>
+                </div>
+                <input type="hidden" name="id" id="id" />
+                <div class="modal-footer">
+                    <button id="settings-button" type="submit" class="btn btn-success">Update</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Hobby</h5>
+                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    ×
+                </button>
+            </div>
+            <form id="edit-form" asp-page="HobbyConfig" asp-page-handler="Delete" class="text-center" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
+                <div class="text-center">
+                    <span class="fs-5">Are you sure to delete this hobby?</span>
+                </div>
+                <div class="form-floating mb-3 mt-3">
+                    <input asp-for="Input.HobbyText" class="form-control" disabled />
+                    <label asp-for="Input.HobbyText" class="form-label"></label>
+                </div>
+                <input type="hidden" name="id" id="id" />
+                <div class="modal-footer">
+                    <button id="settings-button" type="submit" class="btn btn-danger">Delete</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('table #delete').on('click', function () {
+                var id = $(this).parent().find('#id').val();
+                $.ajax({
+                    type: 'GET',
+                    data: { id: id },
+                    url: '@Url.Page("HobbyConfig", "Delete")',
+                    success: function (result) {
+                        $('#deleteModal #id').val(result.id);
+                        $('#deleteModal #Input_HobbyText').val(result.hobbyText);
+                    }
+                });
+            });
+
+            $('table #edit').on('click', function () {
+                var id = $(this).parent().find('#id').val();
+                $.ajax({
+                    type: 'GET',
+                    data: { id: id },
+                    url: '@Url.Page("HobbyConfig", "Edit")',
+                    success: function (result) {
+                        $('#editModal #id').val(result.id);
+                        $('#editModal #Input_HobbyText').val(result.hobbyText);
+                        $('#editModal #Input_HerHis').val(result.herHis);
+                    }
+                });
+            });
+        });
+    </script>
+}
