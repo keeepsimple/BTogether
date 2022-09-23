@@ -1,5 +1,7 @@
+using AspNetCoreHero.ToastNotification.Abstractions;
 using BTogether.BussinessLayer.IServices;
 using BTogether.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,17 +9,20 @@ using System.ComponentModel;
 
 namespace BTogether.Web.Areas.ConfigPage.Pages
 {
+    [Authorize]
     public class HobbyConfigModel : PageModel
     {
         private readonly IHobbyService _hobbyService;
         private readonly ILoveService _loveService;
         private readonly UserManager<User> _userManager;
+        private readonly INotyfService _notyf;
 
-        public HobbyConfigModel(IHobbyService hobbyService, UserManager<User> userManager, ILoveService loveService)
+        public HobbyConfigModel(IHobbyService hobbyService, UserManager<User> userManager, ILoveService loveService, INotyfService notyf)
         {
             _hobbyService = hobbyService;
             _userManager = userManager;
             _loveService = loveService;
+            _notyf = notyf;
         }
 
         public IEnumerable<Hobby> Hobbies { get; set; }
@@ -38,14 +43,16 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var loveCreated = _loveService.CheckUserCreateLove(_userManager.GetUserId(User));
+            var userId = _userManager.GetUserId(User);
+            var loveCreated = _loveService.CheckUserCreateLove(userId);
             if (loveCreated)
             {
-                Hobbies = await _hobbyService.GetHobbiesByUserId(_userManager.GetUserId(User));
+                Hobbies = await _hobbyService.GetHobbiesByUserId(userId);
                 return Page();
             }
             else
             {
+                _notyf.Error("You must config How Long first to access all config");
                 return RedirectToPage("/HowLong");
             }
         }
@@ -63,7 +70,15 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
                 HobbyText = Input.HobbyText,
                 LoveId = loveId
             };
-            await _hobbyService.AddAsync(hob);
+            var result = await _hobbyService.AddAsync(hob);
+            if (result > 0)
+            {
+                _notyf.Success("Create successfully.");
+            }
+            else
+            {
+                _notyf.Error("An error occured. Please try again.");
+            }
             return RedirectToPage();
         }
 
@@ -76,9 +91,16 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
         public async Task<IActionResult> OnPostEditAsync(int id)
         {
             var hob = await _hobbyService.GetByIdAsync(id);
-            hob.HerHis = Input.HerHis;
             hob.HobbyText = Input.HobbyText;
-            await _hobbyService.UpdateAsync(hob);
+            var result = await _hobbyService.UpdateAsync(hob);
+            if (result)
+            {
+                _notyf.Success("Update successfully.");
+            }
+            else
+            {
+                _notyf.Error("An error occured. Please try again.");
+            }
             return RedirectToPage();
         }
 
@@ -91,7 +113,15 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
             var hob = await _hobbyService.GetByIdAsync(id);
-            await _hobbyService.DeleteAsync(hob);
+            var result = await _hobbyService.DeleteAsync(hob);
+            if (result)
+            {
+                _notyf.Success("Delete successfully.");
+            }
+            else
+            {
+                _notyf.Error("An error occured. Please try again.");
+            }
             return RedirectToPage();
         }
     }

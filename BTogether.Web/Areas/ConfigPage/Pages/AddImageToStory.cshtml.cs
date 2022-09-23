@@ -1,5 +1,7 @@
+using AspNetCoreHero.ToastNotification.Abstractions;
 using BTogether.BussinessLayer.IServices;
 using BTogether.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,19 +10,22 @@ using System.IO;
 
 namespace BTogether.Web.Areas.ConfigPage.Pages
 {
+    [Authorize]
     public class AddImageToStoryModel : PageModel
     {
         private readonly IStoryService _storyService;
         private readonly IImageMemoryService _imageMemoryService;
         private readonly UserManager<User> _userManager;
         private IWebHostEnvironment _environment;
+        private readonly INotyfService _notyf;
 
-        public AddImageToStoryModel(IStoryService storyService, IImageMemoryService imageMemoryService, UserManager<User> userManager, IWebHostEnvironment environment)
+        public AddImageToStoryModel(IStoryService storyService, IImageMemoryService imageMemoryService, UserManager<User> userManager, IWebHostEnvironment environment, INotyfService notyf)
         {
             _storyService = storyService;
             _imageMemoryService = imageMemoryService;
             _userManager = userManager;
             _environment = environment;
+            _notyf = notyf;
         }
 
         [Required]
@@ -58,17 +63,17 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
             {
                 StoryId = storyId
             };
-            returnUrl ??= Url.Content("~/ConfigPage/AddImageToStory?storyId="+StoryView.Id);
+            returnUrl ??= Url.Content("~/ConfigPage/AddImageToStory?storyId=" + StoryView.Id);
             ReturnUrl = returnUrl;
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl  ??= Url.Content("~/ConfigPage/AddImageToStory?storyId=" + Input.StoryId);
+            returnUrl ??= Url.Content("~/ConfigPage/AddImageToStory?storyId=" + Input.StoryId);
             if (FileUpload != null)
             {
-                string folderPath = _environment.WebRootPath +"\\images\\"+ _userManager.GetUserId(User);
+                string folderPath = _environment.WebRootPath + "\\images\\" + _userManager.GetUserId(User);
                 if (Directory.Exists(folderPath))
                 {
                     var file = Path.Combine(_environment.WebRootPath, folderPath, FileUpload.FileName);
@@ -91,11 +96,20 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
             var imageMem = new ImageMemory
             {
                 StoryId = Input.StoryId,
+                UserId = _userManager.GetUserId(User),
                 Url = FileUpload.FileName,
                 Description = Input.Description
             };
 
-            await _imageMemoryService.AddAsync(imageMem);
+            var result = await _imageMemoryService.AddAsync(imageMem);
+            if (result > 0)
+            {
+                _notyf.Success("Create successfully.");
+            }
+            else
+            {
+                _notyf.Error("An error occured. Please try again.");
+            }
 
             return LocalRedirect(returnUrl);
         }
@@ -111,7 +125,15 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
             var image = await _imageMemoryService.GetByIdAsync(id);
             returnUrl ??= Url.Content("~/ConfigPage/AddImageToStory?storyId=" + image.StoryId);
             image.Description = Input.Description;
-            await _imageMemoryService.UpdateAsync(image);
+            var result = await _imageMemoryService.UpdateAsync(image);
+            if (result)
+            {
+                _notyf.Success("Update successfully.");
+            }
+            else
+            {
+                _notyf.Error("An error occured. Please try again.");
+            }
             return LocalRedirect(returnUrl);
         }
 
@@ -125,7 +147,17 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
         {
             var image = await _imageMemoryService.GetByIdAsync(id);
             returnUrl ??= Url.Content("~/ConfigPage/AddImageToStory?storyId=" + image.StoryId);
-            await _imageMemoryService.DeleteAsync(image);
+            string folderPath = _environment.WebRootPath + "\\images\\" + image.UserId + "\\" + image.Url;
+            System.IO.File.Delete(folderPath);
+            var result = await _imageMemoryService.DeleteAsync(image);
+            if (result)
+            {
+                _notyf.Success("Delete successfully.");
+            }
+            else
+            {
+                _notyf.Error("An error occured. Please try again.");
+            }
             return LocalRedirect(returnUrl);
         }
     }

@@ -9,7 +9,6 @@
     <link href="~/images/favicon.png" rel="icon">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/BTogether.Web.style.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
     <link href="~/lib/aos/aos.css" rel="stylesheet">
     <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet">
@@ -28,18 +27,12 @@
             <nav id="navbar" class="nav-menu navbar">
                 <ul>
                     <partial name="_LoginPartial" />
-                    <li><a href="#howlong" class="nav-link scrollto"><i class="bx bx-circle-three-quarter"></i> <span>How Long</span></a></li>
-                    <li><a href="#hobby" class="nav-link scrollto"><i class="bx bx-happy-heart-eyes"></i> <span>Hobby</span></a></li>
-                    <li><a href="#story" class="nav-link scrollto"><i class="bx bx-male-female"></i> <span>Story</span></a></li>
                 </ul>
             </nav><!-- .nav-menu -->
         </div>
     </header>
-    <div class="container">
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
+
+    @RenderBody()
 
     <footer id="footer">
         <div class="container">
@@ -48,6 +41,7 @@
             </div>
         </div>
     </footer>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><box-icon color="white" name='up-arrow-alt'></box-icon></a>
 
     <script src="~/lib/purecounter/purecounter_vanilla.js"></script>
     <script src="~/lib/aos/aos.js"></script>
@@ -58,8 +52,9 @@
     <script src="~/lib/waypoints/noframework.waypoints.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/main.js" asp-append-version="true"></script>
-
+    <script src="~/js/main.js"></script>
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

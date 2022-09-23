@@ -1,0 +1,47 @@
+﻿@model IndexModel
+
+<section id="howlong" class="howlong">
+    <div class="container">
+        <div class="section-title">
+            <h2>How Long</h2>
+            <p>If two hearts are <b>meant to be together</b>, <b>no matter how long</b> it takes, <b>how far</b> they go, <b>how tough</b> it seems, fate will bring them together to share their <b>love forever</b>.</p>
+            <p><b>No matter how long</b> we don't see each other, <b>no matter how long</b> we don't hear from each other. <b>No matter</b> what you do or where you go. <b>I'll always</b> love you, <b>I'll always</b> keep you in my heart.</p>
+        </div>
+
+        <div class="row no-gutters">
+            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up">
+                <div class="count-box">
+                    <box-icon size="lg" color="red" name='happy-heart-eyes'></box-icon>
+                    <span data-purecounter-start="0" data-purecounter-end="@Model.TogetherDay" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Together Day</strong></p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="100">
+                <div class="count-box">
+                    <box-icon type='solid' size="lg" color="red" name='plane-take-off'></box-icon>
+                    <span data-purecounter-start="0" data-purecounter-end="@Model.LongDistanceLoveDay" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Long Distance </strong>Love Day</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="200">
+                <div class="count-box">
+                    <box-icon size="lg" color="red" name='time-five'></box-icon>
+                    <span data-purecounter-start="0" data-purecounter-end="@Model.FindPartnerAfter" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Find you after </strong>@Model.FindPartnerAfter years</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch" data-aos="fade-up" data-aos-delay="300">
+                <div class="count-box">
+                    <box-icon size="lg" color="red" name='hourglass' type='solid'></box-icon>
+                    <span data-purecounter-start="0" data-purecounter-end="@Model.LoveMinute" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>The number of minutes</strong> we love each other</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>

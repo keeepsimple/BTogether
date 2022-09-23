@@ -8,7 +8,9 @@ namespace BTogether.Models
 
         public int BirthYear { get; set; }
 
-        public string? IsInLoveWith { get; set; }
+        public string? DisplayText { get; set; }
+
+        public string? HomeImage { get; set; }
 
         public virtual ICollection<Love> Loves { get; set; }
 

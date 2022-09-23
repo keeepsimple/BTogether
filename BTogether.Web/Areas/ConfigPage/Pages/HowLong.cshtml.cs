@@ -1,5 +1,7 @@
+using AspNetCoreHero.ToastNotification.Abstractions;
 using BTogether.BussinessLayer.IServices;
 using BTogether.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,15 +9,18 @@ using System.ComponentModel;
 
 namespace BTogether.Web.Areas.ConfigPage.Pages
 {
+    [Authorize]
     public class HowLongsModel : PageModel
     {
         private readonly ILoveService _loveService;
         private readonly UserManager<User> _userManager;
+        private readonly INotyfService _notyf;
 
-        public HowLongsModel(ILoveService loveService, UserManager<User> userManager)
+        public HowLongsModel(ILoveService loveService, UserManager<User> userManager, INotyfService notyf)
         {
             _loveService = loveService;
             _userManager = userManager;
+            _notyf = notyf;
         }
 
         [BindProperty]
@@ -73,11 +78,17 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
                 var loveExist = all.FirstOrDefault();
                 loveExist.ApartDate = Input.ApartDate;
                 loveExist.StartDate = Input.StartDate;
-                loveExist.PartnerName = Input.PartnerName;
-                loveExist.PartnerId = Input.PartnerId;
                 loveExist.LastModify = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
 
-                await _loveService.UpdateAsync(loveExist);
+                var result = await _loveService.UpdateAsync(loveExist);
+                if (result)
+                {
+                    _notyf.Success("Update successfully.");
+                }
+                else
+                {
+                    _notyf.Error("An error occured. Please try again.");
+                }
             }
             else
             {
@@ -85,12 +96,18 @@ namespace BTogether.Web.Areas.ConfigPage.Pages
                 {
                     ApartDate = Input.ApartDate,
                     StartDate = Input.StartDate,
-                    PartnerName = Input.PartnerName,
                     UserId = _userManager.GetUserId(User),
-                    PartnerId = Input.PartnerId,
                     LastModify = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
                 };
-                await _loveService.AddAsync(love);
+                var result = await _loveService.AddAsync(love);
+                if (result > 0)
+                {
+                    _notyf.Success("Create successfully.");
+                }
+                else
+                {
+                    _notyf.Error("An error occured. Please try again.");
+                }
             }
 
             return RedirectToPage();

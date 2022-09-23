@@ -1,0 +1,38 @@
+﻿@model IndexModel
+@{
+    var listStory = new List<Story>();
+    foreach (var item in Model.Stories)
+    {
+        listStory.Add(item);
+    }
+}
+
+<section id="portfolio" class="portfolio section-bg">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Story</h2>
+            <p>Every <b>love story</b> is beautiful, but ours is <b>my favourite</b></p>
+        </div>
+
+        <div class="row" data-aos="fade-up">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <ul id="portfolio-flters">
+                    <li data-filter="*" class="filter-active">All</li>
+                    @for(int i = 0; i < listStory.Count(); i++)
+                    {
+                        <li data-filter=".filter-@listStory[i].Id">@listStory[i].Title</li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
+            @foreach (var item in listStory)
+            {
+                @await Component.InvokeAsync("ImageMemories", item.Id)
+            }
+        </div>
+
+    </div>
+</section>

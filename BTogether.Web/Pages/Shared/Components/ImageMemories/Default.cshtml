@@ -1,0 +1,13 @@
+﻿@model IEnumerable<ImageMemory>
+
+@foreach (var item in Model)
+{
+    <div class="col-lg-4 col-md-6 portfolio-item filter-@item.StoryId">
+        <div class="portfolio-wrap">
+            <img src="~/images/@item.UserId/@item.Url" class="img-fluid" alt="">
+            <div class="portfolio-links">
+                <span>@item.Description</span>
+            </div>
+        </div>
+    </div>
+}

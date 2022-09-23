@@ -8,5 +8,7 @@ namespace BTogether.BussinessLayer.IServices
         bool CheckUserCreateLove(string userId);
 
         Task<int> GetLoveIdByUserId(string userId);
+
+        Task<Love> GetLoveByUserId(string userId);
     }
 }

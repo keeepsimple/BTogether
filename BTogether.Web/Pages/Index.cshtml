@@ -3,13 +3,44 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<div>
-    <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-        <img class="thumbnail-img" src="~/images/277792071_2846054002207286_4351736574259026181_n.jpg"/>
+@if (Model.IsCreatedLove)
+{
+    <section id="hero" class="d-flex flex-column justify-content-center">
+        @if (string.IsNullOrEmpty(Model.UserView.HomeImage))
+        {
+            <img class="thumbnail-img" src="~/images/1276401.jpg" />
+        }
+        else
+        {
+            <img class="thumbnail-img" src="~/images/@Model.UserView.Id/@Model.UserView.HomeImage" />
+        }
         <div class="hero-container" data-aos="fade-in">
-            <h1>Un and Hoe</h1>
-            <p><span class="typed" data-typed-items="Anh Yêu Em, I Love You, 사랑해요, 我爱你, Я люблю вас, ผมรักคุณ"></span></p>
+            <h1>@Model.UserView.Fullname and @(Model.LoveView.PartnerName == null ? "User" : Model.LoveView.PartnerName)</h1>
+            <p><span class="typed" data-typed-items="@Model.UserView.DisplayText"></span></p>
         </div>
     </section>
-</div>
-
+    <main id="main">
+        <partial name="_HowLong" />
+        <partial name="_Hobbies" />
+        <partial name="_Stories" />
+    </main>
+}
+else
+{
+    <main id="main">
+        <div class="card">
+            <h5 class="card-header center-text">Config your page first</h5>
+            <div class="card-body">
+                <a asp-page="/Account/Manage/Index" class="nav-link scrollto"><i class="bx bx-user"></i><span>Your Profile</span></a>
+                <a asp-area="ConfigPage" asp-page="/HowLong" class="nav-link scrollto"><i class="bx bx-circle-three-quarter"></i> <span>How Long Config</span></a>
+                <form id="partnerId" class="text-center" method="POST">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping">Or enter your partner id</span>
+                        <input type="text" class="form-control" asp-for="Input.PartnerId" placeholder="Partner ID" aria-label="Partner ID" aria-describedby="addon-wrapping">
+                    </div>
+                    <button type="submit" class="btn btn-outline-success mt-3">Gooo</button>
+                </form>
+            </div>
+        </div>
+    </main>
+}

@@ -14,7 +14,7 @@ namespace BTogether.BussinessLayer.Services
 
         public async Task<IEnumerable<Hobby>> GetHobbiesByUserId(string userId)
         {
-            var love = await _unitOfWork.LoveRepository.GetQuery(x => x.UserId == userId).FirstOrDefaultAsync();
+            var love = await _unitOfWork.LoveRepository.GetQuery(x => x.UserId == userId || x.PartnerId == userId).FirstOrDefaultAsync();
             return await _unitOfWork.HobbyRepository.GetQuery(x => x.LoveId == love.Id).ToListAsync();
         }
     }

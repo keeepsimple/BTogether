@@ -1,4 +1,5 @@
-﻿using BTogether.BussinessLayer.IServices;
+﻿using AspNetCoreHero.ToastNotification;
+using BTogether.BussinessLayer.IServices;
 using BTogether.BussinessLayer.Services;
 using BTogether.Data;
 using BTogether.Data.Infrastructure;
@@ -58,6 +59,7 @@ builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IHobbyService, HobbyService>();
 builder.Services.AddScoped<IImageMemoryService, ImageMemoryService>();
 builder.Services.AddScoped<IStoryService, StoryService>();
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 5; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 
 var app = builder.Build();
 

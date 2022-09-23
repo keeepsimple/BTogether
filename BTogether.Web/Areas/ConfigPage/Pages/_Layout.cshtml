@@ -1,0 +1,68 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BTogether</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="~/images/favicon.png" rel="icon">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BTogether.Web.style.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="~/lib/aos/aos.css" rel="stylesheet">
+    <link href="~/lib/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/lib/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="~/lib/swiper/swiper-bundle.min.css" rel="stylesheet">
+</head>
+<body>
+    <header id="header">
+        <div class="d-flex flex-column">
+
+            <div class="profile mt-5">
+                <h1 class="text-light"><a asp-page="/Index">BTogether</a></h1>
+                <div class="social-links mt-3 text-center">
+                </div>
+            </div>
+            <nav id="navbar" class="nav-menu navbar">
+                <ul>
+                    <li><a asp-page="/Index" class="nav-link scrollto"><i class="bx bx-home-heart"></i><span>Home Page</span></a></li>
+                    <li><a asp-area="Identity" asp-page="/Account/Manage/Index" class="nav-link scrollto"><i class="bx bx-user"></i><span>Profile</span></a></li>
+                    <li><a asp-area="ConfigPage" asp-page="/HowLong" class="nav-link scrollto"><i class="bx bx-circle-three-quarter"></i> <span>How Long Config</span></a></li>
+                    <li><a asp-area="ConfigPage" asp-page="/HobbyConfig" class="nav-link scrollto"><i class="bx bx-happy-heart-eyes"></i> <span>Hobby Config</span></a></li>
+                    <li><a asp-area="ConfigPage" asp-page="/StoryConfig" class="nav-link scrollto"><i class="bx bx-male-female"></i> <span>Story Config</span></a></li>
+
+                </ul>
+            </nav><!-- .nav-menu -->
+        </div>
+    </header>
+    <div class="container">
+        <main id="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer id="footer">
+        <div class="container">
+            <div class="copyright">
+                &copy; Copyright <strong><span>BTogether</span></strong>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/purecounter/purecounter_vanilla.js"></script>
+    <script src="~/lib/aos/aos.js"></script>
+    <script src="~/lib/typed.js/typed.min.js"></script>
+    <script src="~/lib/glightbox/js/glightbox.min.js"></script>
+    <script src="~/lib/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="~/lib/swiper/swiper-bundle.min.js"></script>
+    <script src="~/lib/waypoints/noframework.waypoints.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    @await Component.InvokeAsync("Notyf")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

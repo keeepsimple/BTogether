@@ -1,0 +1,44 @@
+﻿@model IndexModel
+
+<section id="hobby" class="hobby">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Our Hobbies</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6" data-aos="fade-up">
+                <h3 class="hobby-title">Her</h3>
+                <div class="hobby-item">
+                    <h4>Hobbies</h4>
+                    <ul>
+                        @foreach (var item in Model.Hobbies)
+                        {
+                            @if (item.HerHis)
+                            {
+                                @(string.IsNullOrEmpty(item.HobbyText) == false ? Html.Raw($"<li>{item.HobbyText}</li>") : null)
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                <h3 class="hobby-title">His</h3>
+                <div class="hobby-item">
+                    <h4>Hobbies</h4>
+                    <ul>
+                        @foreach (var item in Model.Hobbies)
+                        {
+                            @if (!item.HerHis)
+                            {
+                                @(string.IsNullOrEmpty(item.HobbyText) == false ? Html.Raw($"<li>{item.HobbyText}</li>") : null)
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

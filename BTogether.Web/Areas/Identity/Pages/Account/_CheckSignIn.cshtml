@@ -1,0 +1,18 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <li><a asp-page="/Index" class="nav-link scrollto"><i class="bx bx-home-heart"></i><span>Home Page</span></a></li>
+    <li><a asp-page="/Account/Manage/Index" class="nav-link scrollto"><i class="bx bx-user"></i><span>Profile</span></a></li>
+    <li><a asp-area="ConfigPage" asp-page="/HowLong" class="nav-link scrollto"><i class="bx bx-circle-three-quarter"></i> <span>How Long Config</span></a></li>
+    <li><a asp-area="ConfigPage" asp-page="/HobbyConfig" class="nav-link scrollto"><i class="bx bx-happy-heart-eyes"></i> <span>Hobby Config</span></a></li>
+    <li><a asp-area="ConfigPage" asp-page="/StoryConfig" class="nav-link scrollto"><i class="bx bx-male-female"></i> <span>Story Config</span></a></li>
+    }
+    else
+    {
+        @*<li><a class="nav-link scrollto" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a></li>*@
+    <li><a class="nav-link scrollto" id="login" asp-area="Identity" asp-page="/Account/Login"><i class="bx bx-user"></i><span>Login</span></a></li>
+    }

@@ -3,34 +3,20 @@
 @{
     ViewData["Title"] = "Story Config";
 }
-<nav class="navbar navbar-expand-lg bg-light">
-    <div class="container-fluid ">
-        <div class="collapse navbar-collapse text-center" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " asp-area="ConfigPage" asp-page="/HowLong">How Long</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="ConfigPage" asp-page="/HobbyConfig">Hobby</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" asp-area="ConfigPage" asp-page="/StoryConfig">Story</a>
-                </li>
-                <li>
-                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                        <button id="logout" type="submit" class="nav-link scrollto btn btn-link">Logout</button>
-                    </form>
-                </li>
-            </ul>
+<section class="breadcrumbs">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Story Config</h2>
+            <ol>
+                <li><a asp-page="/Index">Home</a></li>
+                <li>Story Config</li>
+            </ol>
         </div>
     </div>
-</nav>
-<div class="row">
-    <div class="col-md-12">
-        <button class="btn btn-warning btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">
+</section>
+<section class="inner-page">
+    <div class="container">
+        <button class="btn btn-outline-warning btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">
             <span class="text">Create</span>
         </button>
         <table class="table table-hover">
@@ -43,34 +29,33 @@
                 <tr>
                     <td>@item.Title</td>
                     <td>
-                        <button id="edit" class="btn btn-primary btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">
+                        <button id="edit" class="btn btn-outline-primary btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">
                             <span class="text">Edit</span>
                         </button>
-                        <button id="delete" class="btn btn-danger btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <button id="delete" class="btn btn-outline-danger btn-icon-split btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
                             <span class="text">Delete</span>
                         </button>
-                        <a class="btn btn-info btn-icon-split btn-sm" asp-page="AddImageToStory" asp-route-storyId="@item.Id"><span class="text">Add Image</span></a>
+                        <a class="btn btn-outline-info btn-icon-split btn-sm" asp-page="AddImageToStory" asp-route-storyId="@item.Id"><span class="text">Add Image</span></a>
                         <input type="hidden" name="id" id="id" value="@item.Id" />
                     </td>
                 </tr>
             }
         </table>
     </div>
-</div>
+</section>
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Create New Story</h5>
-                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <form id="create-form" class="text-center" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
                 <div class="form-floating mb-3 mt-3">
-                    <input asp-for="Input.Title" class="form-control" required/> 
+                    <input asp-for="Input.Title" class="form-control" required />
                     <label asp-for="Input.Title" class="form-label"></label>
                 </div>
 
@@ -87,14 +72,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit Story</h5>
-                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <form id="update-form" asp-page-handler="Edit" class="text-center" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger col-md-12"></div>
                 <div class="form-floating mb-3 mt-3">
-                    <input asp-for="Input.Title" class="form-control" required/>
+                    <input asp-for="Input.Title" class="form-control" required />
                     <label asp-for="Input.Title" class="form-label"></label>
                 </div>
                 <input type="hidden" name="id" id="id" />
@@ -111,8 +95,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Delete Story</h5>
-                <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
-                    ×
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <form id="delete-form" asp-page-handler="Delete" class="text-center" method="post">

@@ -14,7 +14,7 @@ namespace BTogether.BussinessLayer.Services
 
         public bool CheckUserCreateLove(string userId)
         {
-            var love = _unitOfWork.LoveRepository.GetQuery().Where(x => x.UserId == userId).ToList();
+            var love = _unitOfWork.LoveRepository.GetQuery().Where(x => x.UserId == userId || x.PartnerId == userId).ToList();
             if (love.Count > 0)
             {
                 return true;
@@ -22,9 +22,14 @@ namespace BTogether.BussinessLayer.Services
             return false;
         }
 
+        public async Task<Love> GetLoveByUserId(string userId)
+        {
+            return await _unitOfWork.LoveRepository.GetQuery(x => x.UserId == userId || x.PartnerId == userId).FirstOrDefaultAsync();
+        }
+
         public async Task<int> GetLoveIdByUserId(string userId)
         {
-            var love = await _unitOfWork.LoveRepository.GetQuery(x => x.UserId == userId).FirstOrDefaultAsync();
+            var love = await _unitOfWork.LoveRepository.GetQuery(x => x.UserId == userId || x.PartnerId == userId).FirstOrDefaultAsync();
             if (love == null)
             {
                 return 0;
