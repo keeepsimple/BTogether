@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 
-var connectionString = builder.Configuration.GetConnectionString("BTogetherCnn");
+var connectionString = builder.Configuration.GetConnectionString("DefaultCnn");
 
 builder.Services.AddDbContext<BTogetherContext>(options =>
     options.UseSqlServer(connectionString));
