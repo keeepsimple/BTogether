@@ -12,8 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultCnn");
 
-builder.Services.AddDbContext<BTogetherContext>(options =>
-    options.UseSqlServer(connectionString));
+//builder.Services.AddDbContext<BTogetherContext>(options =>
+//    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<BTogetherContext>(opt => opt.UseNpgsql(connectionString));
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<BTogetherContext>()
