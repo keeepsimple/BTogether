@@ -7,7 +7,10 @@ using BTogether.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    EnvironmentName = Environments.Production
+});
 
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultCnn");
