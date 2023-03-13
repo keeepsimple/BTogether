@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using OpenAI_API;
+using OpenAI_API.Completions;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BTogether.Web.Areas.Identity.Pages.Account.Manage
-{
+namespace BTogether.Web.Areas.Identity.Pages.Account.Manage {
     [Authorize]
-    public class IndexModel : PageModel
-    {
+    public class IndexModel : PageModel {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private IWebHostEnvironment _environment;
@@ -28,8 +28,7 @@ namespace BTogether.Web.Areas.Identity.Pages.Account.Manage
             SignInManager<User> signInManager,
             IWebHostEnvironment environment,
             INotyfService notyf,
-            ILoveService loveService)
-        {
+            ILoveService loveService) {
             _userManager = userManager;
             _signInManager = signInManager;
             _environment = environment;
@@ -69,8 +68,7 @@ namespace BTogether.Web.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public class InputModel
-        {
+        public class InputModel {
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -87,19 +85,17 @@ namespace BTogether.Web.Areas.Identity.Pages.Account.Manage
             [DisplayName("Image display in Home Page")]
             public string ImageUrl { get; set; }
 
-            [DisplayName("Text display in Home Page (Separate by \",\")")]
+            [DisplayName("This text will translate by OpenAI to 50 languages. It will take time to translate please be patient!!!")]
             public string DisplayText { get; set; }
         }
 
-        private async Task LoadAsync(User user)
-        {
+        private async Task LoadAsync(User user) {
             var userName = await _userManager.GetUserNameAsync(user);
 
             Username = userName;
             Email = user.Email;
 
-            Input = new InputModel
-            {
+            Input = new InputModel {
                 FullName = user.Fullname,
                 BirthYear = user.BirthYear,
                 ImageUrl = user.HomeImage,
@@ -107,60 +103,49 @@ namespace BTogether.Web.Areas.Identity.Pages.Account.Manage
             };
         }
 
-        public async Task<IActionResult> OnGetAsync()
-        {
+        public async Task<IActionResult> OnGetAsync() {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
+            if (user == null) {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
             UserId = user.Id;
 
             await LoadAsync(user);
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
+        public async Task<IActionResult> OnPostAsync() {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
+            if (user == null) {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if (!ModelState.IsValid)
-            {
+            if (!ModelState.IsValid) {
                 await LoadAsync(user);
                 return Page();
             }
 
-            if (FileUpload != null)
-            {
+            if (FileUpload != null) {
                 string folderPath = _environment.WebRootPath + "\\images\\" + _userManager.GetUserId(User);
-                if (Directory.Exists(folderPath))
-                {
+                if (Directory.Exists(folderPath)) {
                     var file = Path.Combine(_environment.WebRootPath, folderPath, FileUpload.FileName);
-                    using (var fileStream = new FileStream(file, FileMode.Create))
-                    {
+                    using (var fileStream = new FileStream(file, FileMode.Create)) {
                         await FileUpload.CopyToAsync(fileStream);
                     }
-                    if (user.HomeImage.Equals(FileUpload.FileName))
-                    {
+                    if (user.HomeImage.Equals(FileUpload.FileName)) {
                         System.IO.File.Delete(folderPath + "\\" + user.HomeImage);
                     }
                     user.HomeImage = FileUpload.FileName;
-                    
+
                 }
-                else
-                {
+                else {
                     Directory.CreateDirectory(folderPath);
                     var file = Path.Combine(_environment.WebRootPath, folderPath, FileUpload.FileName);
-                    using (var fileStream = new FileStream(file, FileMode.Create))
-                    {
+                    using (var fileStream = new FileStream(file, FileMode.Create)) {
                         await FileUpload.CopyToAsync(fileStream);
                     }
-                    if (user.HomeImage.Equals(FileUpload.FileName))
-                    {
+                    if (user.HomeImage.Equals(FileUpload.FileName)) {
                         System.IO.File.Delete(folderPath + "\\" + user.HomeImage);
                     }
                     user.HomeImage = FileUpload.FileName;
@@ -169,22 +154,38 @@ namespace BTogether.Web.Areas.Identity.Pages.Account.Manage
 
             user.BirthYear = Input.BirthYear;
             user.Fullname = Input.FullName;
-            user.DisplayText = Input.DisplayText;
+
+            var list = new List<string>();
+            var text = "";
+            var apikey = "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";
+            var openAi = new OpenAIAPI(apikey);
+            var completion = new CompletionRequest();
+            completion.Prompt = $"Translate \"{Input.DisplayText}\" to 50 languages separated by comma";
+            completion.Model = OpenAI_API.Models.Model.DavinciText;
+            completion.MaxTokens = 4000;
+            var resultOpenAI = openAi.Completions.CreateCompletionAsync(completion);
+            if (resultOpenAI != null) {
+                foreach (var item in resultOpenAI.Result.Completions) {
+                    text = item.Text;
+                }
+            }
+
+            foreach (var item in text.Split(',')) {
+                list.Add(item.Substring(item.IndexOf(':') + 1));
+            }
+            user.DisplayText = String.Join(',', list);
 
             var love = await _loveService.GetLoveByUserId(user.Id);
-            if(love.PartnerId == user.Id)
-            {
+            if (love != null && love.PartnerId == user.Id) {
                 love.PartnerName = Input.FullName;
                 await _loveService.UpdateAsync(love);
             }
 
             var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            { 
+            if (result.Succeeded) {
                 _notyf.Success("Update successfully.");
             }
-            else
-            {
+            else {
                 _notyf.Error("An error occurred. Please try again.");
             }
             await _signInManager.RefreshSignInAsync(user);

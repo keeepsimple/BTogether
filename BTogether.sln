@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BTogether.Data", "BTogether
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BTogether.BussinessLayer", "BTogether.BussinessLayer\BTogether.BussinessLayer.csproj", "{626EA5CB-A42E-4F95-871A-2A5FEAEEAEEB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{20654D59-5D34-4230-9323-30D4DFDF6A26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4AB35A7F-7B2E-471C-B13F-743E28C30910} = {20654D59-5D34-4230-9323-30D4DFDF6A26}
+		{196BD465-9D64-4364-93C1-8295B83E5ACE} = {20654D59-5D34-4230-9323-30D4DFDF6A26}
+		{574B3FB5-0C53-4624-89A9-5839A545D5AF} = {20654D59-5D34-4230-9323-30D4DFDF6A26}
+		{626EA5CB-A42E-4F95-871A-2A5FEAEEAEEB} = {20654D59-5D34-4230-9323-30D4DFDF6A26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {888174DC-86EA-4A6E-9E5F-62C77D22BA51}

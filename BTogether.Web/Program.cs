@@ -7,17 +7,16 @@ using BTogether.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
-{
-    EnvironmentName = Environments.Production
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions {
+    EnvironmentName = Environments.Development
 });
 
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultCnn");
+var connectionString = builder.Configuration.GetConnectionString("BTogetherCnn");
 
-//builder.Services.AddDbContext<BTogetherContext>(options =>
-//    options.UseSqlServer(connectionString));
-builder.Services.AddDbContext<BTogetherContext>(opt => opt.UseNpgsql(connectionString));
+builder.Services.AddDbContext<BTogetherContext>(options =>
+    options.UseSqlServer(connectionString));
+//builder.Services.AddDbContext<BTogetherContext>(opt => opt.UseNpgsql(connectionString));
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<BTogetherContext>()
@@ -48,12 +47,12 @@ builder.Services.Configure<IdentityOptions>(options => {
 
 });
 
-builder.Services.ConfigureApplicationCookie(opt =>
-{
+builder.Services.ConfigureApplicationCookie(opt => {
     opt.LoginPath = "/Login/";
     opt.LogoutPath = "/Logout/";
     opt.AccessDeniedPath = "/AccessDenied/";
 });
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -65,11 +64,11 @@ builder.Services.AddScoped<IImageMemoryService, ImageMemoryService>();
 builder.Services.AddScoped<IStoryService, StoryService>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 5; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
+if (!app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
@@ -79,7 +78,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+app.UseAuthentication(); ;
 
 app.UseAuthorization();
 
