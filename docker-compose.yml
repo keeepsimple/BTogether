@@ -1,0 +1,33 @@
+version: "3.8"
+
+networks:
+  appnetwork:
+    name: btogethernetwork
+
+services:
+  app:
+    build: .
+    restart: always
+    container_name: btogether
+    depends_on:
+      - btodb
+    environment:
+      - ASPNETCORE_ENVIROMENT=Development
+    networks:
+      - appnetwork
+    ports:
+      - 5000:80
+    links:
+      - btodb
+  
+  btodb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: always
+    container_name: btodb
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Quang@StrongPassword
+    networks:
+      - appnetwork
+    ports:
+      - 1433:1433
